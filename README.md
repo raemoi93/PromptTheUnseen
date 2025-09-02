@@ -1,4 +1,4 @@
-# PromptTheUnseen
+# This branch hosts the official code release for the paper “Prompt the Unseen: Evaluating Visual-Language Alignment Beyond Supervision.”
 
 ## Acknowledgement
 
