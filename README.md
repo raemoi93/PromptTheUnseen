@@ -46,7 +46,7 @@ export HF_TOKEN=<Huggingface token that has access granted for the model weights
 
 ## Dataset Preparation
 
-Download `train_seen.json` (for train) and `test_seen_mcqa.json` and `test_unseen_mcqa.json` (for evaluation).
+Download `train_seen.json` (for train) and `test_seen_mcqa.json` and `test_unseen_mcqa.json` (for evaluation) and place them under vg_datasets/
 
 - train_seen.json (for train)  
   https://drive.google.com/file/d/15HJlAJGk8_BmZVoe-NrIcsAavFzkUwaT/view?usp=drive_link
