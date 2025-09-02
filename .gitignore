@@ -1,0 +1,42 @@
+# Python
+__pycache__
+*.pyc
+*.egg-info
+dist
+
+# Log
+*.log
+*.log.*
+*.json
+*.jsonl
+
+# Data
+!**/alpaca-data-conversation.json
+vg_object_centric_data_snd/
+mmvp_test/
+neuron_analysis_results/
+
+# Editor
+.idea
+*.swp
+
+# Other
+.DS_Store
+wandb
+output
+*.zip
+
+checkpoints
+ckpts*
+LLaVA-Pretrain/
+playground/
+ocr_vqa200k/
+
+.ipynb_checkpoints
+*.ipynb
+
+# DevContainer
+!.devcontainer/*
+
+# Demo
+serve_images/
