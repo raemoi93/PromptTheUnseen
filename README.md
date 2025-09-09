@@ -1,4 +1,4 @@
-# This branch hosts the official code release for the paper “Prompt the Unseen: Evaluating Visual-Language Alignment Beyond Supervision.”
+# Prompt the Unseen: Evaluating Visual-Language Alignment Beyond Supervision
 
 ## Acknowledgement
 
@@ -65,9 +65,31 @@ Download images from VG official website:
 
 ---
 
-## Checkpoints for weights
+## Checkpoints for Weights
 
-<!-- (No content was provided in the original text; header kept intentionally.) -->
+The checkpoints are available at the following link:  
+👉 [Google Drive Folder](https://drive.google.com/drive/folders/15mklHnurKdYMsffuif6LhYdkrulc1SLc?usp=sharing)
+
+You will find three subfolders:
+
+1. **vision_encoder_ablation_weights**  
+   Models for the vision encoder ablation study, with the LM fixed to the default setting (*Llama-3.2-3B-Instruct*).  
+   Contains weights for: **CLIP** (default), **Dinov2**, **ViT**, and **MAE**.
+
+2. **lm_ablation_weights**  
+   Models for the LM ablation study, with the vision encoder fixed to the default setting (**CLIP**).  
+   Contains weights for: **Qwen3-1.7B**, **Qwen3-0.6B**, and **Llama-3.2-3B-Pretrain**.
+
+3. **dataset_ablation_weights**  
+   Models for the dataset ablation study. Includes weights trained with varying dataset ablation proportions using both **class-preserving** and **class-exclusive** methods.
+
+---
+
+### Notes
+- All filenames are self-explanatory.  
+- If any configuration is unclear from a filename, please open an issue and we will clarify.  
+- To evaluate these models, use `scripts/test_default.sh` and refer to the **Evaluation** section below.
+
 
 ---
 
@@ -108,20 +130,40 @@ Exemplar prediction files are provided:
 - https://drive.google.com/file/d/1ZYHM9ya-tbHRv1uiP0urxQ2B69xR1cbM/view?usp=drive_link  (default model on test_unseen_mcqa.json)
 - https://drive.google.com/file/d/1tbwkuaCDa5zAewaIHX29MvOVBZqgKjbt/view?usp=drive_link  (default model on test_seen_mcqa.json)
 
+Also you might have to modify 
+- `--vision_tower` to `facebook/dinov2-large` (Dinov2), `facebook/webssl-mae300m-full2b-224` (MAE), `google/vit-large-patch16-224-in21k` (classification trained ViT) 
+- `--model_name_or_path` to `meta-llama/Llama-3.2-3B` (Pretrain), `Qwen/Qwen3-1.7B` (Qwen3-1.7B), `Qwen/Qwen3-0.6B` (Qwen3-0.6B) 
+according to your configuration
+
 ---
 
-## FFN analysis
+## FFN Analysis
 
-Download prompts for test-seen and test-unseen:
+### Download Prompts
+- [Prompts for test-unseen](https://drive.google.com/file/d/1R37kA1lXaEpngYYdeb-XgNsCg0ToJV8R/view?usp=drive_link)  
+- [Prompts for test-seen](https://drive.google.com/file/d/1273tSI_3r7FS1r8wVhbII-A2QIh7Vazt/view?usp=drive_link)  
 
-- https://drive.google.com/file/d/1R37kA1lXaEpngYYdeb-XgNsCg0ToJV8R/view?usp=drive_link  (prompts from test-unseen)
-- https://drive.google.com/file/d/1273tSI_3r7FS1r8wVhbII-A2QIh7Vazt/view?usp=drive_link  (prompts from test-seen)
-
-Run:
+### Run
 ```bash
-bash scripts/ffn_analysis_test.sh
+bash scripts/ffn_analysis.sh
 ```
 
-You have to modify:
-- `--test_path` to the path where prompts are downloaded
-- also modify for `--image_dir`, `--output_path` and `--weight_path`
+Before running, update the following arguments in the script:
+- `--test_path`: path to the downloaded prompts  
+- `--image_dir`: directory containing evaluation images  
+- `--output_path`: directory where results will be saved  
+- `--weight_path`: path to the model weights  
+Optionally you may also modify `--vision_tower` and `--model_name_or_path` to replace vision encoder and LM backbone.
+
+### Precomputed Results
+- [FFN analysis results for test-seen](https://drive.google.com/file/d/1IX0hER3VmhafEOOKsAAz4a8fYESkMkz-/view?usp=drive_link)  
+- [FFN analysis results for test-unseen](https://drive.google.com/file/d/1nE9tpzTkaxTG6-xeCLUuiPVwcaKK0fWv/view?usp=drive_link)  
+
+After downloading and unzipping, you will find tens of thousands of JSON files. Each file corresponds to one forward pass of a prompt.
+
+### JSON File Structure
+- **`gt_synset`**: ground-truth class label  
+- **`prompt`**: the actual prompt given to the model  
+- **`top_toks_per_layer`**: top 9 extracted tokens from each layer  
+  - Notably, after layer 15, these tokens begin to closely align with the ground-truth class label.  
+- **`random_toks_per_layer`**: 9 tokens extracted from randomly selected values  

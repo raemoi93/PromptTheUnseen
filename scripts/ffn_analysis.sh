@@ -1,6 +1,6 @@
 # Modify vision_tower, model_name_or_path according to your setup
 # 
-python demo_inference_vg_attribution.py \
+python ffn_neuron_analysis.py \
   --model_name_or_path meta-llama/Llama-3.2-3B-Instruct \
   --vision_tower openai/clip-vit-large-patch14-336 \
   --mm_projector_type linear \
