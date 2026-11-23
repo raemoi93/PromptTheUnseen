@@ -37,6 +37,16 @@ from llava.mm_utils import process_images, tokenizer_image_token
 from llava.conversation import conv_templates
 from llava.constants import DEFAULT_IMAGE_TOKEN, DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN, IMAGE_TOKEN_INDEX
 
+def str2bool(v):
+    """argparse type for True/False flags: type=bool would turn the string "False" into True."""
+    if isinstance(v, bool):
+        return v
+    if v.lower() in ("true", "1", "yes"):
+        return True
+    if v.lower() in ("false", "0", "no"):
+        return False
+    raise argparse.ArgumentTypeError(f"expected True or False, got {v!r}")
+
 def parse_args():
     parser = argparse.ArgumentParser(description="LLaVA Inference")
     parser.add_argument("--model_name_or_path", type=str, required=True,
@@ -47,11 +57,11 @@ def parse_args():
                         help="MLP projector type: linear, mlp2x_gelu, etc.")
     parser.add_argument("--mm_vision_select_layer", type=int, default=-2,
                         help="Vision feature selection layer")
-    parser.add_argument("--mm_use_im_start_end", type=bool, default=False,
+    parser.add_argument("--mm_use_im_start_end", type=str2bool, default=False,
                         help="Use image start/end tokens")
-    parser.add_argument("--mm_use_im_patch_token", type=bool, default=False,
+    parser.add_argument("--mm_use_im_patch_token", type=str2bool, default=False,
                         help="Use image patch tokens")
-    parser.add_argument("--tune_mm_mlp_adapter", type=bool, default=False,
+    parser.add_argument("--tune_mm_mlp_adapter", type=str2bool, default=False,
                         help="Tune MM MLP adapter")
     parser.add_argument("--version", type=str, default="plain",
                         help="Conversation template version")
